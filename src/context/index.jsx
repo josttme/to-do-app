@@ -1,4 +1,4 @@
-import { createContext } from 'react'
+import { createContext, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 
@@ -6,6 +6,7 @@ export const TodoContext = createContext()
 
 export function TodoProvider({ children }) {
 	const [todos, setSaveTodos] = useLocalStorage('TODOS_V1')
+	const [searchValue, setSearchValue] = useState('')
 
 	// Cantidad de ToDos
 	const totalTodos = todos?.length
@@ -29,12 +30,28 @@ export function TodoProvider({ children }) {
 		setSaveTodos(newTodos)
 	}
 
+	// Buscar ToDo.
+	const searchedTodos = todos.filter((todo) => {
+		// función texto sin tildes
+		const noTildes = (text) => {
+			return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+		}
+
+		// Normalizando texto sin tildes y a Lower Case
+		const TodoTextLC = noTildes(todo.text.toLowerCase())
+		const searchTextLC = noTildes(searchValue.toLowerCase())
+
+		return TodoTextLC.includes(searchTextLC)
+	})
+
 	const value = {
 		todos,
 		totalTodos,
 		completedTodos,
 		completeTodo,
-		deleteTodo
+		deleteTodo,
+		searchedTodos,
+		setSearchValue
 	}
 
 	return <TodoContext.Provider value={value}>{children}</TodoContext.Provider>

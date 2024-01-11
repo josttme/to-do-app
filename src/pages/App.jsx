@@ -35,7 +35,7 @@ import { TodoCounter } from '../components/TodoCounter'
 ]
  */
 export function App() {
-	const { todos, completeTodo, deleteTodo } = useContext(TodoContext)
+	const { searchedTodos, completeTodo, deleteTodo } = useContext(TodoContext)
 	const openModal = false
 	return (
 		<section className="text-center text-white">
@@ -48,7 +48,7 @@ export function App() {
 			<TodoCounter />
 
 			<TodoList>
-				{todos?.map(({ text, completed }) => (
+				{searchedTodos?.map(({ text, completed }) => (
 					<TodoItem
 						key={text}
 						text={text}
