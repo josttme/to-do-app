@@ -4,6 +4,8 @@ import { TodoSearch } from '../components/TodoSearch'
 import { TodoList } from '../components/TodoList'
 import { TodoItem } from '../components/TodoItem'
 import { TodoButtonCreate } from '../components/TodoButtonCreate'
+import Modal from '../components/Modal/Modal'
+import TodoForm from '../components/Modal/TodoForm'
 
 const defaultTodos = [
 	{ text: 'Terminar el Curso de JavaScript Desde Cero', completed: true },
@@ -31,6 +33,7 @@ const defaultTodos = [
 ]
 
 export function App() {
+	const openModal = false
 	return (
 		<section className="text-center text-white">
 			<div className=" mx-auto mb-10 grid h-14  w-11/12 max-w-lg place-items-center lg:relative">
@@ -46,6 +49,11 @@ export function App() {
 					<TodoItem key={text} text={text} completed={completed} />
 				))}
 			</TodoList>
+			{openModal && (
+				<Modal>
+					<TodoForm />
+				</Modal>
+			)}
 		</section>
 	)
 }
