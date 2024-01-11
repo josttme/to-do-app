@@ -9,5 +9,5 @@ export function TodoList({ children }) {
 }
 
 TodoList.propTypes = {
-	children: PropTypes.node.isRequired
+	children: PropTypes.node
 }

@@ -1,13 +1,15 @@
+import { useContext } from 'react'
 import { TodoTitle } from '../components/TodoTitle'
-import { TodoCounter } from '../components/TodoCounter'
 import { TodoSearch } from '../components/TodoSearch'
 import { TodoList } from '../components/TodoList'
 import { TodoItem } from '../components/TodoItem'
 import { TodoButtonCreate } from '../components/TodoButtonCreate'
+import { TodoContext } from '../context/index'
 import Modal from '../components/Modal/Modal'
 import TodoForm from '../components/Modal/TodoForm'
+import { TodoCounter } from '../components/TodoCounter'
 
-const defaultTodos = [
+/* const defaultTodos = [
 	{ text: 'Terminar el Curso de JavaScript Desde Cero', completed: true },
 	{ text: 'Terminar el Curso de ReactJS', completed: false },
 	{
@@ -31,8 +33,9 @@ const defaultTodos = [
 		completed: false
 	}
 ]
-
+ */
 export function App() {
+	const { todos, completeTodo, deleteTodo } = useContext(TodoContext)
 	const openModal = false
 	return (
 		<section className="text-center text-white">
@@ -42,11 +45,17 @@ export function App() {
 			</div>
 
 			<TodoSearch />
-			<TodoCounter completed={1} total={7} />
+			<TodoCounter />
 
 			<TodoList>
-				{defaultTodos.map(({ text, completed }) => (
-					<TodoItem key={text} text={text} completed={completed} />
+				{todos?.map(({ text, completed }) => (
+					<TodoItem
+						key={text}
+						text={text}
+						completed={completed}
+						onComplete={() => completeTodo(text)}
+						onDelete={() => deleteTodo(text)}
+					/>
 				))}
 			</TodoList>
 			{openModal && (
