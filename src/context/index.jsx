@@ -7,6 +7,7 @@ export const TodoContext = createContext()
 export function TodoProvider({ children }) {
 	const [todos, setSaveTodos] = useLocalStorage('TODOS_V1')
 	const [searchValue, setSearchValue] = useState('')
+	const [openModal, setOpenModal] = useState(false)
 
 	// Cantidad de ToDos
 	const totalTodos = todos?.length
@@ -36,13 +37,22 @@ export function TodoProvider({ children }) {
 		const noTildes = (text) => {
 			return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
 		}
-
 		// Normalizando texto sin tildes y a Lower Case
 		const TodoTextLC = noTildes(todo.text.toLowerCase())
 		const searchTextLC = noTildes(searchValue.toLowerCase())
 
 		return TodoTextLC.includes(searchTextLC)
 	})
+
+	// Agregar ToDo y guardar en el LocalStorage.
+	const addTodo = (text) => {
+		const newTodos = [...todos]
+		newTodos.push({
+			text,
+			completed: false
+		})
+		setSaveTodos(newTodos)
+	}
 
 	const value = {
 		todos,
@@ -51,7 +61,10 @@ export function TodoProvider({ children }) {
 		completeTodo,
 		deleteTodo,
 		searchedTodos,
-		setSearchValue
+		setSearchValue,
+		openModal,
+		setOpenModal,
+		addTodo
 	}
 
 	return <TodoContext.Provider value={value}>{children}</TodoContext.Provider>

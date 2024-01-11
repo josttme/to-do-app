@@ -36,7 +36,6 @@ import { TodoCounter } from '../components/TodoCounter'
  */
 export function App() {
 	const { searchedTodos, completeTodo, deleteTodo } = useContext(TodoContext)
-	const openModal = false
 	return (
 		<section className="text-center text-white">
 			<div className=" mx-auto mb-10 grid h-14  w-11/12 max-w-lg place-items-center lg:relative">
@@ -58,11 +57,10 @@ export function App() {
 					/>
 				))}
 			</TodoList>
-			{openModal && (
-				<Modal>
-					<TodoForm />
-				</Modal>
-			)}
+
+			<Modal>
+				<TodoForm />
+			</Modal>
 		</section>
 	)
 }

@@ -1,7 +1,16 @@
+import { useContext } from 'react'
+import { TodoContext } from '../context'
+
 export function TodoButtonCreate() {
+	const { setOpenModal } = useContext(TodoContext)
 	return (
 		<div className="group fixed bottom-5 right-5 z-50   h-14 w-14 lg:absolute lg:bottom-0 lg:right-0  lg:w-24 ">
-			<button className="rounded-fullftransform grid h-14 w-14 place-content-center rounded-full border-2  border-[#b131e9] bg-[#0236c5] hover:cursor-pointer hover:bg-blue-700   focus:outline-none focus:ring focus:ring-[#b131e9] focus:ring-opacity-80  lg:w-24">
+			<button
+				className="rounded-fullftransform grid h-14 w-14 place-content-center rounded-full border-2  border-[#b131e9] bg-[#0236c5] hover:cursor-pointer hover:bg-blue-700   focus:outline-none focus:ring focus:ring-[#b131e9] focus:ring-opacity-80  lg:w-24"
+				onClick={() => {
+					setOpenModal((state) => !state)
+				}}
+			>
 				<svg
 					className=" h-10 w-10"
 					xmlns="http://www.w3.org/2000/svg"
