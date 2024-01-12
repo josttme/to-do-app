@@ -26,8 +26,13 @@ export function TodoButtonCreate() {
 					/>
 				</svg>
 			</button>
-			<span className="text-ms text-md absolute -bottom-28  left-1/2  hidden h-12 w-36 -translate-x-1/2 -translate-y-full transform place-content-center rounded-lg bg-blue-600  text-center font-sans text-white after:absolute after:bottom-full after:left-1/2 after:-translate-x-1/2 after:border-8 after:border-x-transparent after:border-b-blue-600 after:border-t-transparent after:content-[''] lg:group-hover:grid ">
-				Crea un ToDo (m)
+			<span className=" text-md absolute -bottom-28  left-1/2  hidden h-12 w-48 -translate-x-1/2 -translate-y-full transform items-center rounded-lg bg-blue-600 p-3  text-left font-sans text-white after:absolute after:bottom-full after:left-1/2 after:-translate-x-1/2 after:border-8 after:border-x-transparent after:border-b-blue-600 after:border-t-transparent after:content-[''] lg:group-hover:grid ">
+				<span>Crea un ToDo</span>
+				<div className="absolute inset-y-0 right-3 hidden  items-center lg:flex">
+					<kbd className="inline-flex items-center rounded-md border px-[5px]  py-[5px]  font-sans text-sm  text-white opacity-70">
+						Ctrl + M
+					</kbd>
+				</div>
 			</span>
 		</div>
 	)
