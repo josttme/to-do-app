@@ -1,4 +1,5 @@
-import { useEffect } from 'react'
+import { useContext, useEffect } from 'react'
+import { TodoContext } from '../context'
 
 export default function useKeyboard(
 	inputRef,
@@ -7,6 +8,8 @@ export default function useKeyboard(
 	searchValue,
 	setSearchValue
 ) {
+	const { openModal, setOpenModal } = useContext(TodoContext)
+
 	useEffect(() => {
 		const handleKeyDown = (event) => {
 			if (event.keyCode === 27) {
@@ -15,12 +18,19 @@ export default function useKeyboard(
 				setSearchValue('')
 				inputRef.current.value = ''
 				inputRef.current.blur()
+				setOpenModal(false)
 			}
 
 			if (event.ctrlKey && event.keyCode === 75) {
 				// Ctrl + K: Fue presionado
 				event.preventDefault()
 				setCtrlKPressed(true)
+			}
+
+			if (event.ctrlKey && event.keyCode === 77) {
+				// Ctrl + M: Fue presionado
+				event.preventDefault()
+				if (!openModal) setOpenModal(true)
 			}
 		}
 
