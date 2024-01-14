@@ -35,7 +35,15 @@ import { TodoCounter } from '../components/TodoCounter'
 ]
  */
 export function App() {
-	const { searchedTodos, completeTodo, deleteTodo } = useContext(TodoContext)
+	const {
+		searchedTodos,
+		completeTodo,
+		deleteTodo,
+		setOpenModal,
+		setIsEditing,
+		setIdTodo,
+		setTextTodo
+	} = useContext(TodoContext)
 	return (
 		<section className="text-center text-white">
 			<div className=" mx-auto mb-10 grid h-14  w-11/12 max-w-lg place-items-center lg:relative">
@@ -54,6 +62,12 @@ export function App() {
 						completed={completed}
 						onComplete={() => completeTodo(id)}
 						onDelete={() => deleteTodo(id)}
+						onEdit={() => {
+							setOpenModal(true)
+							setIsEditing(true)
+							setIdTodo(id)
+							setTextTodo(text)
+						}}
 					/>
 				))}
 			</TodoList>

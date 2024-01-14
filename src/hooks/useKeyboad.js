@@ -8,7 +8,7 @@ export default function useKeyboard(
 	searchValue,
 	setSearchValue
 ) {
-	const { openModal, setOpenModal } = useContext(TodoContext)
+	const { openModal, setOpenModal, setIsEditing } = useContext(TodoContext)
 
 	useEffect(() => {
 		const handleKeyDown = (event) => {
@@ -19,6 +19,7 @@ export default function useKeyboard(
 				inputRef.current.value = ''
 				inputRef.current.blur()
 				setOpenModal(false)
+				setIsEditing(false)
 			}
 
 			if (event.ctrlKey && event.keyCode === 75) {

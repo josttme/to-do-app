@@ -3,55 +3,68 @@ import { useContext, useState, useRef, useEffect } from 'react'
 import { TodoContext } from '../context'
 
 export const useTodoForm = () => {
-	const { todos, setOpenModal, addTodo } = useContext(TodoContext)
-	const [newTodoValue, setNewTodoValue] = useState('')
+	const {
+		todos,
+		setOpenModal,
+		addTodo,
+		isEditing,
+		idTodo,
+		editTodo,
+		setIsEditing,
+		textTodo
+	} = useContext(TodoContext)
+	const [newTodoValue, setNewTodoValue] = useState(textTodo)
 	const [textareaBorderError, setTextareaBorderError] = useState(false)
 	const [messageError, setMessageError] = useState('')
 
 	const textArea = useRef()
-	const isDuplicateRef = useRef(false)
 
 	// Hace focus en el textarea al abrir el modal.
 	useEffect(() => {
 		textArea.current.focus()
 	}, [])
 
+	// 1) Eliminar espacios en blanco al principio y al final
+	// 2) Reemplazar más de 2 espacios con solo 1 espacio entre palabras
+	const sanitizeText = (text) => {
+		return text.replace(/^\s+|\s+$/g, '').replace(/\s{2,}/g, ' ')
+	}
+
+	// Veridica si ya existe una tarea con el mismo texto (true o false).
+	const isTextDuplicate = (todos, text) => {
+		return todos.some((todo) => todo.text === text)
+	}
+
+	// Veridica si ya existe una tarea con el mismo texto que no pertenezca al texto que se esta editando para poder guardar el mismo texto si no se edita.
+	const isTextDuplicateWithDifferentId = (todos, text, id) => {
+		return todos.filter((t) => t.id !== id).some((t) => t.text === text)
+	}
+
 	// Manejador del texto al Agregar un ToDo
 	const handleSubmit = (e) => {
 		e.preventDefault()
 
-		// 1) Eliminar espacios en blanco al principio y al final
-		// 2) Reemplazar más de 2 espacios con solo 1 espacio entre palabras
-		const sanitizedNewTodoValue = newTodoValue
-			.replace(/^\s+|\s+$/g, '') // 1
-			.replace(/\s{2,}/g, ' ') // 2
+		// Texto sin espacios en blanco
+		const sanitizedText = sanitizeText(newTodoValue)
 
-		// Veridica si ya existe una tarea con el mismo texto (true o false).
-		const isDuplicateTodo = todos.some(
-			(todo) => todo.text === sanitizedNewTodoValue
-		)
+		// Comprobar si hay texto duplicado
+		const isDuplicate = isTextDuplicate(todos, sanitizedText)
 
-		// verifica si el input esta vacio o tiene menos de 1 caracter y si ya existe una tarea con el mismo texto.
-		if (
-			sanitizedNewTodoValue === '' ||
-			sanitizedNewTodoValue.length < 1 ||
-			isDuplicateTodo
-		) {
-			// Cambia el valor de la referencia isDuplicateRef a true si ya existe una tarea con el mismo texto.
-			isDuplicateRef.current = isDuplicateTodo
-			// Llama a la función handleTodoDuplicated() para mostrar el mensaje de error.
-			handleTodoDuplicated(isDuplicateTodo)
+		const isEditingAllowed =
+			isEditing && !isTextDuplicateWithDifferentId(todos, sanitizedText, idTodo)
+
+		if (!sanitizedText || (isDuplicate && !isEditingAllowed)) {
+			handleErrory(isTextDuplicate)
 		} else {
-			// Agrega la tarea al arreglo de tareas en locaStorage.
-			addTodo(newTodoValue)
-			// Resetea el valor del Modal para cerrarlo.
+			isEditing ? editTodo(idTodo, sanitizedText) : addTodo(sanitizedText)
 			setOpenModal(false)
+			setIsEditing(false)
 		}
 	}
 
 	// Manejador de tarea duplicada.
-	const handleTodoDuplicated = (isDuplicateTodo) => {
-		const message = generateErrorMessage(isDuplicateTodo)
+	const handleErrory = (isTextDuplicate) => {
+		const message = generateErrorMessage(isTextDuplicate)
 		setTextareaBorderError(true)
 		setMessageError(message)
 	}
@@ -64,6 +77,7 @@ export const useTodoForm = () => {
 	// Manejador del boton Cancelar, resetea el valor del Modal para cerrarlo.
 	const onCancel = () => {
 		setOpenModal(false)
+		setIsEditing(false)
 	}
 
 	// Manejador del cambio de texto en el textarea.
@@ -77,6 +91,10 @@ export const useTodoForm = () => {
 			handleSubmit(e)
 		}
 	}
+
+	const textButton = isEditing ? 'Editar' : 'Agregar'
+	const titleForm = isEditing ? 'Editar TODO' : 'Agregar un nuevo ToDo'
+
 	return {
 		messageError,
 		textArea,
@@ -84,6 +102,9 @@ export const useTodoForm = () => {
 		onCancel,
 		onChange,
 		textareaBorderError,
-		handleKeyDown
+		handleKeyDown,
+		textButton,
+		titleForm,
+		textTodo
 	}
 }

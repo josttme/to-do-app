@@ -8,9 +8,11 @@ export default function TodoForm() {
 		onCancel,
 		onChange,
 		textareaBorderError,
-		handleKeyDown
+		handleKeyDown,
+		textButton,
+		titleForm,
+		textTodo
 	} = useTodoForm()
-
 	const stylesTextareaError = `${
 		textareaBorderError && 'focus:border-[#e04448] border-3 border-[#e04448]'
 	}`
@@ -23,12 +25,13 @@ export default function TodoForm() {
 				htmlFor="newTodo"
 				className="py-2 text-center text-2xl font-medium text-white"
 			>
-				Escribe tu nuevo TODO
+				{titleForm}
 			</label>
 			<textarea
 				className={`w-full  rounded-lg border-4 bg-white/90 px-3 py-2 leading-tight text-gray-700  focus:border-blue-400  focus:outline-none ${stylesTextareaError}`}
 				style={{ maxHeight: '200px', minHeight: '100px' }}
 				id="newTodo"
+				defaultValue={textTodo}
 				name="todoText"
 				cols="30"
 				rows="10"
@@ -49,7 +52,7 @@ export default function TodoForm() {
 					className="w-full transform rounded-lg bg-blue-600 px-6 py-2 text-lg font-medium capitalize tracking-wide text-white transition-colors duration-300 hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80"
 					type="submit"
 				>
-					Agregar
+					{textButton}
 				</button>
 			</div>
 			<div

@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react'
+import { createContext, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { v4 as uuidv4 } from 'uuid'
 import { useLocalStorage } from '../hooks/useLocalStorage'
@@ -9,6 +9,9 @@ export function TodoProvider({ children }) {
 	const [todos, setSaveTodos] = useLocalStorage('TODOS_V1')
 	const [searchValue, setSearchValue] = useState('')
 	const [openModal, setOpenModal] = useState(false)
+	const [isEditing, setIsEditing] = useState(false)
+	const [textTodo, setTextTodo] = useState('')
+	const [idTodo, setIdTodo] = useState(null)
 
 	// Cantidad de ToDos
 	const totalTodos = todos?.length
@@ -56,6 +59,17 @@ export function TodoProvider({ children }) {
 		setSaveTodos(newTodos)
 	}
 
+	const editTodo = (id, text) => {
+		const newTodos = [...todos]
+		const todoIndex = newTodos.findIndex((todo) => todo.id === id)
+		newTodos[todoIndex].text = text
+		setSaveTodos(newTodos)
+		setIdTodo(null)
+	}
+	useEffect(() => {
+		if (openModal) setTextTodo('')
+	}, [openModal])
+
 	const value = {
 		todos,
 		totalTodos,
@@ -66,7 +80,14 @@ export function TodoProvider({ children }) {
 		setSearchValue,
 		openModal,
 		setOpenModal,
-		addTodo
+		addTodo,
+		isEditing,
+		setIsEditing,
+		idTodo,
+		setIdTodo,
+		editTodo,
+		textTodo,
+		setTextTodo
 	}
 
 	return <TodoContext.Provider value={value}>{children}</TodoContext.Provider>

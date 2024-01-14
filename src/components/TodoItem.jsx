@@ -1,5 +1,5 @@
 import { PropTypes } from 'prop-types'
-export function TodoItem({ text, completed, onComplete, onDelete }) {
+export function TodoItem({ text, completed, onComplete, onDelete, onEdit }) {
 	const isCompletedText = `text-white text-center  text-white/80 text-center' ${
 		completed && 'line-through decoration-[#b131e9] decoration-3'
 	}`
@@ -26,7 +26,7 @@ export function TodoItem({ text, completed, onComplete, onDelete }) {
 				</svg>
 			</span>
 			<p className={isCompletedText}>{text}</p>
-			<span className="cursor-pointer">
+			<span className="cursor-pointer" onClick={onEdit}>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					fill="none"
@@ -64,5 +64,6 @@ TodoItem.propTypes = {
 	text: PropTypes.string.isRequired,
 	completed: PropTypes.bool,
 	onComplete: PropTypes.func.isRequired,
-	onDelete: PropTypes.func.isRequired
+	onDelete: PropTypes.func.isRequired,
+	onEdit: PropTypes.func.isRequired
 }
