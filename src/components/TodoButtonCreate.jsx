@@ -7,6 +7,7 @@ export function TodoButtonCreate() {
 		<div className="group fixed bottom-5 right-5 z-50   h-14 w-14 lg:absolute lg:bottom-0 lg:right-0  lg:w-24 ">
 			<button
 				className="rounded-fullftransform grid h-14 w-14 place-content-center rounded-full border-2  border-[#b131e9] bg-[#0236c5] hover:cursor-pointer hover:bg-blue-700   focus:outline-none focus:ring focus:ring-[#b131e9] focus:ring-opacity-80  lg:w-24"
+				aria-label="Create new ToDo"
 				onClick={() => {
 					setOpenModal((state) => !state)
 					setIsEditing(false)
