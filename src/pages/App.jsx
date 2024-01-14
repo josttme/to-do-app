@@ -47,13 +47,13 @@ export function App() {
 			<TodoCounter />
 
 			<TodoList>
-				{searchedTodos?.map(({ text, completed }) => (
+				{searchedTodos?.map(({ id, text, completed }) => (
 					<TodoItem
-						key={text}
+						key={id}
 						text={text}
 						completed={completed}
-						onComplete={() => completeTodo(text)}
-						onDelete={() => deleteTodo(text)}
+						onComplete={() => completeTodo(id)}
+						onDelete={() => deleteTodo(id)}
 					/>
 				))}
 			</TodoList>
