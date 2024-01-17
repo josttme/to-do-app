@@ -2,6 +2,7 @@ import { createContext, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { v4 as uuidv4 } from 'uuid'
 import { useLocalStorage } from '../hooks/useLocalStorage'
+import confetti from 'canvas-confetti'
 
 export const TodoContext = createContext()
 
@@ -12,12 +13,25 @@ export function TodoProvider({ children }) {
 	const [isEditing, setIsEditing] = useState(false)
 	const [textTodo, setTextTodo] = useState('')
 	const [idTodo, setIdTodo] = useState(null)
+	const [isAllTodosCompleted, setIsallTodosCompleted] = useState(false)
 
 	// Cantidad de ToDos
 	const totalTodos = todos?.length
 
 	// Cantidad de ToDos completados
 	const completedTodos = todos?.filter((todo) => !!todo.completed).length
+
+	// Compreba que todos los ToDos estén completados y ejecuta la función confetti.
+	const allTodosCompleted =
+		todos.length !== 0 && todos?.every((t) => t.completed)
+	useEffect(() => {
+		if (allTodosCompleted) {
+			confetti()
+			setIsallTodosCompleted(true)
+		} else {
+			setIsallTodosCompleted(false)
+		}
+	}, [allTodosCompleted])
 
 	// Marcar como ToDo completado y guardar en el LocalStorage.
 	const completeTodo = (id) => {
@@ -87,7 +101,9 @@ export function TodoProvider({ children }) {
 		setIdTodo,
 		editTodo,
 		textTodo,
-		setTextTodo
+		setTextTodo,
+		isAllTodosCompleted,
+		setIsallTodosCompleted
 	}
 
 	return <TodoContext.Provider value={value}>{children}</TodoContext.Provider>
